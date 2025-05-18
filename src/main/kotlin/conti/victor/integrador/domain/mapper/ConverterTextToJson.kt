@@ -72,7 +72,7 @@ class ConverterTextToJson(val originalText: String) {
             return LocalDate.parse(dateText, formatter)
 
         } catch (exception: RuntimeException) {
-            throw IllegalArgumentException("A data ${dateText} é inválida para a máscara yyyyMMdd")
+            throw IllegalArgumentException("A data $dateText é inválida para a máscara yyyyMMdd")
         }
     }
 
