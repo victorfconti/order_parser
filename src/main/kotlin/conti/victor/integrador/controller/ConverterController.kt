@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("/api/v1/converter")
-class ConverterController(private final val converterService: ConverterService) {
+@RequestMapping("/api/v1/purchase/converter")
+class ConverterController(private val converterService: ConverterService) {
 
     @PostMapping
     fun convert(@RequestBody originalText: String): List<PucharseResponseDTO> {

@@ -4,6 +4,7 @@ import conti.victor.integrador.dto.OrderDTO
 import conti.victor.integrador.dto.ProductDTO
 import conti.victor.integrador.dto.PucharseResponseDTO
 import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang3.Validate
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -18,41 +19,40 @@ class ConverterTextToJson(val originalText: String) {
 
     fun parser(): List<PucharseResponseDTO>{
         val lines = originalText.split("\n")
-        var pucharses = mutableListOf<PucharseResponseDTO>()
+        val pucharses = mutableListOf<PucharseResponseDTO>()
 
-        var line = 0
 
-        lines.forEach {
-            if(StringUtils.isBlank(it)) return@forEach
-            println("Linha $line lida: $it")
+
+        lines.forEach { line ->
+            if(StringUtils.isBlank(line)) return@forEach
+            Validate.isTrue(line.length == 95, "A linha deve ter 95 caracteres")
+
             pucharses.add(PucharseResponseDTO(
-                userId = obtainId(it),
-                name = obtainName(it),
-                orders = obtainOrders(it)
+                userId = obtainId(line),
+                name = obtainName(line),
+                orders = obtainOrders(line)
                 )
             )
-            line++
-            println("Linha $line lida com sucesso!")
         }
 
         return pucharses.toList()
     }
 
-    private fun obtainOrders(it: String): List<OrderDTO> {
+    private fun obtainOrders(line: String): List<OrderDTO> {
         return listOf(
             OrderDTO(
-            orderId = obtainOrderId(it),
-            date = obtainOrderDate(it),
-            products = obtainProducts(it)
+            orderId = obtainOrderId(line),
+            date = obtainOrderDate(line),
+            products = obtainProducts(line)
         ))
 
     }
 
-    private fun obtainProducts(it: String): List<ProductDTO> {
+    private fun obtainProducts(line: String): List<ProductDTO> {
         return listOf(
             ProductDTO(
-            productId = obtainProductId(it),
-            value = obtainProductValue(it)
+            productId = obtainProductId(line),
+            value = obtainProductValue(line)
         )
         )
     }
@@ -67,8 +67,13 @@ class ConverterTextToJson(val originalText: String) {
 
     private fun obtainOrderDate(line: String): LocalDate {
         val dateText = line.substring(orderDateRange)
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        return LocalDate.parse(dateText, formatter)
+        try {
+            val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+            return LocalDate.parse(dateText, formatter)
+
+        } catch (exception: RuntimeException) {
+            throw IllegalArgumentException("A data ${dateText} é inválida para a máscara yyyyMMdd")
+        }
     }
 
     private fun obtainOrderId(line: String): Long {
