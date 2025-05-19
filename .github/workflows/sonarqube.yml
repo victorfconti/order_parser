@@ -24,14 +24,7 @@ jobs:
       - name: Build and Test
         run: ./gradlew build
 
-      - name: Run SonarQube Scanner
+      - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
-        run: |
-          ./gradlew sonarqube \
-            -Dsonar.projectKey=order_parser \
-            -Dsonar.organization=victorfconti \
-            -Dsonar.branch.name=main \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.login=$SONAR_TOKEN
+        run: ./gradlew build sonar --info
