@@ -23,7 +23,7 @@ Agora, inicie o contêiner com o seguinte comando:
 ``` bash
 docker run -p 8080:8080 order-parser
 ```
-### Passo 4: Acessar a Aplicação
+### Passo 4: Acessar a Aplicação via swagger
 A aplicação será iniciada e estará acessível em:
-- **URL:** [http://localhost:8080](http://localhost:8080)
+- **URL:** [http://localhost:8080/swagger](http://localhost:8080/swagger)
 
