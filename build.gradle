@@ -51,8 +51,21 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+tasks.sonarqube {
+    dependsOn tasks.jacocoTestReport // Garante que o relatório seja gerado antes do Sonar
+}
+
+tasks.jacocoTestReport {
+    dependsOn tasks.test // Garante que os testes sejam executados antes de gerar o relatório
+
+    reports {
+        xml.required.set(true)  // Relatório XML necessário para o Sonar
+        csv.required.set(false)
+        html.required.set(false)
+    }
+}
+
 sonar {
-    dependsOn jacocoTestReport
     properties {
         property "sonar.projectKey", "victorfconti_order-parser"
         property "sonar.organization", "victorfconti"
@@ -61,15 +74,5 @@ sonar {
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
 
     }
-
-    jacocoTestReport {
-        dependsOn test // Garante que os testes sejam executados primeiro
-
-        reports {
-            xml.required = true  // Relatório XML para o Sonar
-            csv.required = false
-            html.required = false
-        }
-    }
-
 }
+
