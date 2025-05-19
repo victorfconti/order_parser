@@ -44,6 +44,11 @@ kotlin {
     }
 }
 
+plugins {
+    id "org.sonarqube" version "4.4.0.3356"
+}
+
+
 tasks.named('test') {
     useJUnitPlatform()
 }
