@@ -1,6 +1,6 @@
 package conti.victor.integrador.domain.service
 
-import conti.victor.integrador.domain.mapper.ConverterTextToJson
+import conti.victor.integrador.domain.mapper.ConverterOldOrderToJson
 import conti.victor.integrador.dto.PucharseResponseDTO
 import conti.victor.integrador.exception.BadRequestException
 import conti.victor.integrador.exception.InternalServerException
@@ -20,7 +20,7 @@ class ConverterService {
             MDC.put("traceId", UUID.randomUUID().toString())
 
             logger.info("Iniciando o processamento do texto")
-            return ConverterTextToJson(originalText).parser()
+            return ConverterOldOrderToJson(originalText).parser()
         } catch (e: IllegalArgumentException){
             logger.error("Falha ao processar o texto: {}", e.message, e)
             throw BadRequestException(e.message)
@@ -42,7 +42,7 @@ class ConverterService {
             MDC.put("fileName", originalFile.first().name)
             val body = String(originalFile.first().bytes)
             logger.info("Finalizando o processamento do arquivo")
-            return ConverterTextToJson(body).parser()
+            return ConverterOldOrderToJson(body).parser()
         } catch (e: IllegalArgumentException){
             logger.error("Falha ao processar o arquivo: {}", e.message, e)
             throw BadRequestException(e.message)

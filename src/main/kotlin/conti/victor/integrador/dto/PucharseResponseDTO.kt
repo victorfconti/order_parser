@@ -16,7 +16,7 @@ data class PucharseResponseDTO(
     @JsonProperty("name")
     val name: String,
     @JsonProperty("orders")
-    val orders: List<OrderDTO>
+    val orders: MutableList<OrderDTO>
 )
 
 @JsonPropertyOrder(value = ["order_id", "total", "date", "products"])
@@ -27,7 +27,7 @@ data class OrderDTO(
     @JsonProperty("date")
     val date: LocalDate,
     @JsonProperty("products")
-    val products: List<ProductDTO>
+    val products: MutableList<ProductDTO>
 ){
     @get:JsonProperty("total")
     @Suppress("unused")

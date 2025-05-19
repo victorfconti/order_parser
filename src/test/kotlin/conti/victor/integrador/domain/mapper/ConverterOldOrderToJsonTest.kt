@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 
-class ConverterTextToJsonTest {
+class ConverterOldOrderToJsonTest {
     private val objectMapper: JsonMapper = JsonMapper.builder()
         .addModule(JavaTimeModule())
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -28,7 +28,7 @@ class ConverterTextToJsonTest {
         delimiter = ';'
     )
     fun testaConverterSingleLine(received: String, expected: String) {
-        val response = ConverterTextToJson(received).parser()
+        val response = ConverterOldOrderToJson(received).parser()
 
         val jsonCreated = objectMapper.writeValueAsString(response)
 
@@ -40,7 +40,7 @@ class ConverterTextToJsonTest {
     fun testaConverterSingleLineInvalidData() {
         val invalidDateLine = "0000000002                                     Medeiros00000123450000000111      256.2420201a01"
 
-        assertThatThrownBy { ConverterTextToJson(invalidDateLine).parser() }.isInstanceOf(IllegalArgumentException::class.java)
+        assertThatThrownBy { ConverterOldOrderToJson(invalidDateLine).parser() }.isInstanceOf(IllegalArgumentException::class.java)
     }
 
     @Test
@@ -48,7 +48,7 @@ class ConverterTextToJsonTest {
     fun testaConverterSingleLineInvalidSize() {
         val invalidDateLine = "0000000002                                     Medeiros00000123450000000111      256.242020101"
 
-        assertThatThrownBy { ConverterTextToJson(invalidDateLine).parser() }.isInstanceOf(IllegalArgumentException::class.java)
+        assertThatThrownBy { ConverterOldOrderToJson(invalidDateLine).parser() }.isInstanceOf(IllegalArgumentException::class.java)
     }
 
     @Test
@@ -61,7 +61,7 @@ class ConverterTextToJsonTest {
             ?.use { it.readText() }
             ?: throw IllegalArgumentException("File not found")
 
-        val response = ConverterTextToJson(fileContent).parser()
+        val response = ConverterOldOrderToJson(fileContent).parser()
         val jsonCreated = objectMapper.writeValueAsString(response)
 
         assertThat(jsonCreated).isEqualTo(jsonEsperado)
@@ -71,14 +71,14 @@ class ConverterTextToJsonTest {
     @Test
     @DisplayName("Teste de conversão de 4 linhas, cada uma com mais de um produto")
     fun testaConverterFourLinesMultiplesProducts() {
-        val jsonEsperado = "[{\"user_id\":1,\"name\":\"Zarelli\",\"orders\":[{\"order_id\":123,\"total\":\"1024.48\",\"date\":\"2021-12-01\",\"products\":[{\"product_id\":111,\"value\":\"512.24\"},{\"product_id\":122,\"value\":\"512.24\"}]}]},{\"user_id\":2,\"name\":\"Medeiros\",\"orders\":[{\"order_id\":12345,\"total\":\"512.48\",\"date\":\"2020-12-01\",\"products\":[{\"product_id\":111,\"value\":\"256.24\"},{\"product_id\":122,\"value\":\"256.24\"}]}]}]"
+        val jsonEsperado = "[{\"user_id\":2,\"name\":\"Medeiros\",\"orders\":[{\"order_id\":12345,\"total\":\"512.48\",\"date\":\"2020-12-01\",\"products\":[{\"product_id\":111,\"value\":\"256.24\"},{\"product_id\":122,\"value\":\"256.24\"}]}]},{\"user_id\":1,\"name\":\"Zarelli\",\"orders\":[{\"order_id\":123,\"total\":\"1024.48\",\"date\":\"2021-12-01\",\"products\":[{\"product_id\":111,\"value\":\"512.24\"},{\"product_id\":122,\"value\":\"512.24\"}]}]}]"
 
         val fileContent = object {}.javaClass.getResourceAsStream("/data_four_lines_multiples_products.txt")
             ?.bufferedReader()
             ?.use { it.readText() }
             ?: throw IllegalArgumentException("File not found")
 
-        val response = ConverterTextToJson(fileContent).parser()
+        val response = ConverterOldOrderToJson(fileContent).parser()
         val jsonCreated = objectMapper.writeValueAsString(response)
 
         assertThat(jsonCreated).isEqualTo(jsonEsperado)

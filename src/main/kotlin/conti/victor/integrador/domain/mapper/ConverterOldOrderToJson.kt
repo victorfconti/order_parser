@@ -9,7 +9,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class ConverterTextToJson(val originalText: String) {
+class ConverterOldOrderToJson(private val originalText: String) {
     private val userIdRange = 0..9
     private val nameRange = 10 .. 54
     private val orderIdRange = 55..64
@@ -17,43 +17,59 @@ class ConverterTextToJson(val originalText: String) {
     private val productValueRange = 75..86
     private val orderDateRange = 87..94
 
+    private val userPurcharses = mutableMapOf<Long, PucharseResponseDTO>()
+
     fun parser(): List<PucharseResponseDTO>{
         val lines = originalText.split("\n")
-        val pucharses = mutableListOf<PucharseResponseDTO>()
-
 
 
         lines.forEach { line ->
             if(StringUtils.isBlank(line)) return@forEach
             Validate.isTrue(line.length == 95, "A linha deve ter 95 caracteres")
 
-            pucharses.add(PucharseResponseDTO(
-                userId = obtainId(line),
-                name = obtainName(line),
-                orders = obtainOrders(line)
+            val userId = obtainUserId(line)
+
+            if (userPurcharses.containsKey(userId)) {
+                val pucharse = userPurcharses[userId]
+                val orderId = obtainOrderId(line)
+
+                if(pucharse?.orders?.any { it.orderId == orderId } == false){
+                    pucharse.orders.add(obtainOrder(line))
+                } else {
+                    pucharse?.orders?.first { it.orderId == orderId }.let {
+                        it?.products?.add(obtainProducts(line))
+                    }
+                }
+
+
+
+            } else {
+                userPurcharses[userId] = PucharseResponseDTO(
+                    userId = userId,
+                    name = obtainName(line),
+                    orders = mutableListOf(obtainOrder(line))
                 )
-            )
+            }
+
+
         }
 
-        return pucharses.toList()
+        return userPurcharses.values.toList()
     }
 
-    private fun obtainOrders(line: String): List<OrderDTO> {
-        return listOf(
-            OrderDTO(
+    private fun obtainOrder(line: String): OrderDTO {
+        return OrderDTO(
             orderId = obtainOrderId(line),
             date = obtainOrderDate(line),
-            products = obtainProducts(line)
-        ))
+            products = mutableListOf(obtainProducts(line))
+        )
 
     }
 
-    private fun obtainProducts(line: String): List<ProductDTO> {
-        return listOf(
-            ProductDTO(
+    private fun obtainProducts(line: String): ProductDTO {
+        return ProductDTO(
             productId = obtainProductId(line),
             value = obtainProductValue(line)
-        )
         )
     }
 
@@ -80,7 +96,7 @@ class ConverterTextToJson(val originalText: String) {
         return line.substring(orderIdRange).trim().toLong()
     }
 
-    private fun obtainId(line: String): Long {
+    private fun obtainUserId(line: String): Long {
         return line.substring(userIdRange).trim().toLong()
     }
 
