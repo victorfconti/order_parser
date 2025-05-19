@@ -32,5 +32,6 @@ jobs:
           ./gradlew sonarqube \
             -Dsonar.projectKey=order_parser \
             -Dsonar.organization=victorfconti \
+            -Dsonar.branch.name=main \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN

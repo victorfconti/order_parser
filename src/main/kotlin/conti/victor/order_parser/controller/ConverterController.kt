@@ -1,7 +1,7 @@
-package conti.victor.integrador.controller
+package conti.victor.order_parser.controller
 
-import conti.victor.integrador.domain.service.ConverterService
-import conti.victor.integrador.dto.PucharseResponseDTO
+import conti.victor.order_parser.domain.service.ConverterService
+import conti.victor.order_parser.dto.PucharseResponseDTO
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

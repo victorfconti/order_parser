@@ -1,4 +1,4 @@
-package conti.victor.integrador.dto
+package conti.victor.order_parser.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder

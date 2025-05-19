@@ -1,4 +1,4 @@
-package conti.victor.integrador.exception
+package conti.victor.order_parser.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler

@@ -1,8 +1,8 @@
-package conti.victor.integrador.domain.mapper
+package conti.victor.order_parser.domain.mapper
 
-import conti.victor.integrador.dto.OrderDTO
-import conti.victor.integrador.dto.ProductDTO
-import conti.victor.integrador.dto.PucharseResponseDTO
+import conti.victor.order_parser.dto.OrderDTO
+import conti.victor.order_parser.dto.ProductDTO
+import conti.victor.order_parser.dto.PucharseResponseDTO
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.Validate
 import java.math.BigDecimal

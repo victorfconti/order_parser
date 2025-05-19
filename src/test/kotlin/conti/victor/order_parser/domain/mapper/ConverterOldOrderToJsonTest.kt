@@ -1,4 +1,4 @@
-package conti.victor.integrador.domain.mapper
+package conti.victor.order_parser.domain.mapper
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper

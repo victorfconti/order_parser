@@ -1,9 +1,9 @@
-package conti.victor.integrador.domain.service
+package conti.victor.order_parser.domain.service
 
-import conti.victor.integrador.domain.mapper.ConverterOldOrderToJson
-import conti.victor.integrador.dto.PucharseResponseDTO
-import conti.victor.integrador.exception.BadRequestException
-import conti.victor.integrador.exception.InternalServerException
+import conti.victor.order_parser.domain.mapper.ConverterOldOrderToJson
+import conti.victor.order_parser.dto.PucharseResponseDTO
+import conti.victor.order_parser.exception.BadRequestException
+import conti.victor.order_parser.exception.InternalServerException
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.Validate
 import org.slf4j.LoggerFactory
