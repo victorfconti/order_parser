@@ -3,8 +3,8 @@ name: SonarQube Analysis
 on:
   push:
     branches:
-      - main # Executa o SonarQube em cada push na branch `main`
-  pull_request: # Executa o SonarQube em novos PRs
+      - main
+  pull_request:
 
 jobs:
   sonar:
@@ -12,18 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Configuração inicial e checkout do repositório
       - name: Check out code
         uses: actions/checkout@v3
 
-      # Step 2: Configuração do Java (se necessário, caso seu projeto use Java)
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '17' # Garanta que a versão do Java é compatível com o Sonar
+          java-version: '21'
           distribution: 'temurin'
 
-      # Step 3: Instalar e configurar o Maven (caso seja um projeto Maven/Java)
       - name: Set up Maven
         uses: actions/setup-java@v3
         with:
@@ -31,16 +28,12 @@ jobs:
           java-version: '17'
           cache: maven
 
-      # Step 4: Executar o build e os testes do projeto (modifique para seu build)
       - name: Build and Test
         run: mvn clean verify
 
-      # Step 5: Executar o Sonar utilizando o SonarScanner
       - name: Run SonarQube Scanner
         env:
-          # Variáveis de ambiente necessárias para autenticação com o SonarQube
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          # URL do SonarQube (pode ser a versão cloud ou self-hosted)
           SONAR_HOST_URL: https://sonarcloud.io
         run: |
           mvn sonar:sonar \
