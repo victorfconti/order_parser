@@ -13,14 +13,12 @@ class GlobalExceptionHandler {
     fun badRequestExceptionHandler(e: BadRequestException): ErrorResponse {
         return ErrorResponse(
             e.message,
-            HttpStatus.BAD_REQUEST,
-            e
+            HttpStatus.BAD_REQUEST
         )
     }
 }
 
 data class ErrorResponse(
     val message: String?,
-    val code: HttpStatus,
-    val exception: Exception
+    val code: HttpStatus
 )

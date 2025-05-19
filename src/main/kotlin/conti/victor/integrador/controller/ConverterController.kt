@@ -8,18 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.util.Optional
 
 @RestController
 @RequestMapping("/api/v1/purchase/converter")
 class ConverterController(private val converterService: ConverterService) {
 
     @PostMapping
-    fun convert(@RequestBody originalText: String): List<PucharseResponseDTO> {
+    fun convert(@RequestBody(required = false) originalText: Optional<String>): List<PucharseResponseDTO> {
         return converterService.convertString(originalText)
     }
 
-    @PostMapping("file")
-    fun convert(@RequestParam("file") originalFile: List<MultipartFile>): List<PucharseResponseDTO> {
+    @PostMapping("/file")
+    fun convertFile(@RequestParam("file", required = false) originalFile: Optional<List<MultipartFile>>): List<PucharseResponseDTO> {
         return converterService.convertFile(originalFile)
     }
 
