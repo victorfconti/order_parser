@@ -30,7 +30,6 @@ jobs:
           SONAR_HOST_URL: https://sonarcloud.io
         run: |
           ./gradlew sonarqube \
-            -Dsonar.projectKey=seu-projeto \
-            -Dsonar.organization=sua-organizacao \
+            -Dsonar.projectKey=order_parser \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN
